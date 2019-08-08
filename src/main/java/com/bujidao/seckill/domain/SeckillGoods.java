@@ -11,5 +11,5 @@ public class SeckillGoods {
     private Integer stockCount;
     private Date startDate;
     private Date endDate;
-
+    //这是测试git是否能push
 }
