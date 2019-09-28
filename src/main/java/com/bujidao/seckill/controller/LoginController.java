@@ -3,6 +3,7 @@ package com.bujidao.seckill.controller;
 import com.bujidao.seckill.result.Result;
 import com.bujidao.seckill.service.UserService;
 import com.bujidao.seckill.vo.LoginVo;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+@Slf4j
 @Controller
 @RequestMapping("/local")
 public class LoginController {
@@ -20,7 +22,6 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    private static Logger logger= LoggerFactory.getLogger(LoginController.class);
     @RequestMapping("/login")
     public String login(){
         return "login";
@@ -29,13 +30,13 @@ public class LoginController {
     @RequestMapping("/dologin")
     @ResponseBody
     public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
-        logger.info(loginVo.toString());
+        log.info("登陆的用户为"+loginVo.toString());
         //登陆校验
         userService.login(response,loginVo);
         return Result.success(true);
     }
 
-    @RequestMapping("/dlogin")
+//    @RequestMapping("/dlogin")
     @ResponseBody
     public Result<Boolean> testDlogin(HttpServletResponse response){
         LoginVo loginVo=new LoginVo();

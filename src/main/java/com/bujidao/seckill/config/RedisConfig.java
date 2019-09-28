@@ -10,7 +10,7 @@ import redis.clients.jedis.JedisPoolConfig;
 /**
  * redis的配置类
  */
-@Configuration
+//@Configuration
 //@ConfigurationProperties(prefix = "redis")//以redis开头的配置全部读到这个类
 public class RedisConfig {
     @Value("${redis.hostname}")

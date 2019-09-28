@@ -5,8 +5,8 @@ import com.bujidao.seckill.redis.prefix.GoodsKeyPrefix;
 import com.bujidao.seckill.result.CodeMsg;
 import com.bujidao.seckill.result.Result;
 import com.bujidao.seckill.service.GoodsService;
-import com.bujidao.seckill.service.RedisService;
-import com.bujidao.seckill.service.UserService;
+import com.bujidao.seckill.util.JsonUtil;
+import com.bujidao.seckill.util.RedisUtil;
 import com.bujidao.seckill.vo.GoodsDetailVo;
 import com.bujidao.seckill.vo.GoodsVo;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +31,7 @@ import java.util.List;
 @RequestMapping("/goods")
 public class GoodsController {
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private GoodsService goodsService;
-
-    @Autowired
-    private RedisService redisService;
 
     @Autowired
     private ThymeleafViewResolver thymeleafViewResolver;
@@ -62,7 +56,7 @@ public class GoodsController {
 //            return "login";
         }
         //1.取缓存
-        String html=redisService.get(GoodsKeyPrefix.getGoodsList,"",String.class);
+        String html= JsonUtil.stringToObject(RedisUtil.get(GoodsKeyPrefix.getGoodsList,""),String.class);
         //如果redis存在，直接取出页面进行渲染
         if(!StringUtils.isEmpty(html)) {
             return html;
@@ -77,7 +71,7 @@ public class GoodsController {
         //渲染的模板的名字就是要渲染的那个页面的名字，如"goodslist.html"
         html=thymeleafViewResolver.getTemplateEngine().process("goodslist",webContext);
         if(!StringUtils.isEmpty(html)) {
-            redisService.set(GoodsKeyPrefix.getGoodsList,"",html);
+            RedisUtil.set(GoodsKeyPrefix.getGoodsList,"",html);
         }
         //3.输出结果
         return html;
@@ -89,9 +83,9 @@ public class GoodsController {
                                           @PathVariable("goodsId") long goodsId) {
         GoodsDetailVo goodsDetailVo=new GoodsDetailVo();
         if (user == null) {
-            //如果从redis没取到数据，跳转到login
-//            return "login";
+            return Result.error(CodeMsg.SESSION_ERROR);
         }
+        log.info("利用token获取的user=="+user);
         GoodsVo goodsVo = goodsService.getSeckillGoodsById(goodsId);
         if (goodsVo == null) {
             log.info("页面详情页未找到商品id为{}的商品",goodsId);
@@ -105,8 +99,8 @@ public class GoodsController {
         int seckillState = 0;
         long remainTime = 0;
         log.info("当前时间{}",new Date(now));
-        log.info("秒杀开始时间{}",goodsVo.getEndDate());
-        log.info("秒杀结束时间{}",goodsVo.getStartDate());
+        log.info("秒杀开始时间{}", goodsVo.getStartDate());
+        log.info("秒杀结束时间{}",goodsVo.getEndDate());
         if (now < startAt) {//秒杀还没开始
             seckillState = 0;
             remainTime = (startAt - now)/1000;//倒计时还有多少秒

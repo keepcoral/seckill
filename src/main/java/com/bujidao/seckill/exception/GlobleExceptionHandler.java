@@ -2,6 +2,7 @@ package com.bujidao.seckill.exception;
 
 import com.bujidao.seckill.result.CodeMsg;
 import com.bujidao.seckill.result.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,12 +17,14 @@ import java.util.List;
  * 全局捕获异常类，只要作用在@RequestMapping上，所有的异常都会被捕获
  *
  */
+@Slf4j
 @ControllerAdvice
 @ResponseBody
 public class GlobleExceptionHandler {
     //拦截到的异常如果属于该类则调用该方法
     @ExceptionHandler(value= Exception.class)
     public Result<String> exceptionHandler(HttpServletRequest request,Exception e){
+//        log.error("捕获到异常:{}",e.getMessage());
         e.printStackTrace();
         //拦截到的异常直接把异常输出到前端
         if(e instanceof GlobleException){

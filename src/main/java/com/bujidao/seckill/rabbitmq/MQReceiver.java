@@ -4,8 +4,8 @@ import com.bujidao.seckill.domain.SeckillOrder;
 import com.bujidao.seckill.domain.User;
 import com.bujidao.seckill.service.GoodsService;
 import com.bujidao.seckill.service.OrderService;
-import com.bujidao.seckill.service.RedisService;
 import com.bujidao.seckill.service.SeckillService;
+import com.bujidao.seckill.util.JsonUtil;
 import com.bujidao.seckill.vo.GoodsVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -30,7 +30,7 @@ public class MQReceiver {
     @RabbitListener(queues = {MQConfig.SECKILL_QUEUE})
     public void receive(String message) {
         log.info("receive msg:{}", message);
-        SeckillMessage seckillMessage = RedisService.stringToBean(message, SeckillMessage.class);
+        SeckillMessage seckillMessage = JsonUtil.stringToObject(message, SeckillMessage.class);
         User user = seckillMessage.getUser();
         long goodsId = seckillMessage.getGoodsId();
 
@@ -45,6 +45,7 @@ public class MQReceiver {
         int stock = goodsVo.getStockCount();
         log.info("库存为{}", stock);
         if (stock <= 0) {
+            log.info("库存<0秒杀失败");
             return;
         }
 
@@ -59,4 +60,9 @@ public class MQReceiver {
         seckillService.seckill(user,goodsVo);
     }
 
+
+    @RabbitListener(queues = {MQConfig.TEST_QUEUE})
+    public void receiveTestMessage(String message) {
+        log.info("receive test-msg:{}", message);
+    }
 }

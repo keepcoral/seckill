@@ -1,6 +1,6 @@
 package com.bujidao.seckill.rabbitmq;
 
-import com.bujidao.seckill.service.RedisService;
+import com.bujidao.seckill.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,13 @@ public class MQSender {
     private AmqpTemplate amqpTemplate;
 
     public void sendSeckillMessage(SeckillMessage message){
-        String msg= RedisService.beanToString(message);
+        String msg= JsonUtil.objToString(message);
         log.info("send msg:{}",msg);
         amqpTemplate.convertAndSend(MQConfig.SECKILL_QUEUE,msg);
+    }
+
+    public void sendTestMessage(String message){
+        log.info("send msg:{}",message);
+        amqpTemplate.convertAndSend(MQConfig.TEST_QUEUE,message);
     }
 }

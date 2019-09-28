@@ -9,8 +9,8 @@ import com.bujidao.seckill.result.CodeMsg;
 import com.bujidao.seckill.result.Result;
 import com.bujidao.seckill.service.GoodsService;
 import com.bujidao.seckill.service.OrderService;
-import com.bujidao.seckill.service.RedisService;
 import com.bujidao.seckill.service.SeckillService;
+import com.bujidao.seckill.util.RedisUtil;
 import com.bujidao.seckill.vo.GoodsVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -32,9 +32,6 @@ public class SeckillController implements InitializingBean {
     private OrderService orderService;
 
     @Autowired
-    private RedisService redisService;
-
-    @Autowired
     private SeckillService seckillService;
 
     @Autowired
@@ -52,7 +49,7 @@ public class SeckillController implements InitializingBean {
             return;
         }
         for (GoodsVo goodsVo : goodsList) {
-            redisService.set(GoodsKeyPrefix.getSeckillGoodsStock, "" + goodsVo.getId(), +goodsVo.getStockCount());
+            RedisUtil.set(GoodsKeyPrefix.getSeckillGoodsStock, "" + goodsVo.getId(), +goodsVo.getStockCount());
             localOverMap.put(goodsVo.getId(),false);
         }
 
@@ -77,7 +74,7 @@ public class SeckillController implements InitializingBean {
         }
 
         //预减库存
-        long stock = redisService.decr(GoodsKeyPrefix.getSeckillGoodsStock, "" + goodsId);
+        long stock = RedisUtil.decr(GoodsKeyPrefix.getSeckillGoodsStock, "" + goodsId);
         if (stock < 0) {
             localOverMap.put(goodsId,true);
             return Result.error(CodeMsg.STOCK_OVER);

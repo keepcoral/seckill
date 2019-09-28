@@ -8,7 +8,7 @@ public interface UserDao {
     @Select("select * from tb_user where id=#{id}")
     User getById(@Param("id") long id);
 
-    @Insert("insert into tb_user(name) values(#{name})")
+    @Insert("insert into tb_user(id,nickname,password,salt) values(#{id},#{nickname},#{password},#{salt})")
     int InsertUser(User user);
 
     @Update("update tb_user set password=#{password} where id=#{id}")

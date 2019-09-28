@@ -42,7 +42,7 @@
                 <span id="seckillTip"></span>
             </td>
             <td>
-                <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doseckill()">立即秒杀</button>
+                <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="doseckill()" disabled="disabled">立即秒杀</button>
                 <input type="hidden" name="goodsId"  id="goodsId" />
             </td>
         </tr>
@@ -156,6 +156,8 @@
                     render(data.data);
                 }else{
                     layer.msg(data.msg);
+                    if(data.code==500210)
+                        window.location.href="/local/login";
                 }
             },
             error:function(){
@@ -167,24 +169,23 @@
         var remainSeconds=$('#remainSecond').val();//获取倒计时
         var timeout;
         if(remainSeconds>0){//秒杀还没开始,倒计时
-            $('#seckillTip').html("秒杀未开始");
-            $('#buyButtun').attr("disabled",true);//这个按钮不能点
+            $('#buyButton').attr("disabled",true);//这个按钮不能点
             $('#seckillTip').html("秒杀倒计时："+remainSeconds+"秒");
             timeout=setTimeout(function () {
                 $('#countDown').text(remainSeconds-1);
                 $('#remainSecond').val(remainSeconds-1);
                 countDown();
-            },1000)
+            },1000);
         }else if(remainSeconds==0){//秒杀正在进行中
-            $('#buyButtun').attr("disabled",false);
+            $('#buyButton').attr("disabled",false);
             if(timeout){
                 clearTimeout(timeout);//清除timeout的值
                 //就相当于取消定时器
             }
-            $('#seckillTip').html("秒杀正在进行中")
+            $('#seckillTip').html("秒杀正在进行中");
         }else{//秒杀已结束
             $('#buyButton').attr("disabled",true);
-            $('#seckillTip').html("秒杀已结束")
+            $('#seckillTip').html("秒杀已结束");
         }
     }
 </script>

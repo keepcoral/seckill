@@ -1,9 +1,12 @@
 package com.bujidao.seckill.service;
 
+import com.alibaba.fastjson.JSON;
 import com.bujidao.seckill.domain.Order;
 import com.bujidao.seckill.domain.SeckillOrder;
 import com.bujidao.seckill.domain.User;
 import com.bujidao.seckill.redis.prefix.SeckillKeyPrefix;
+import com.bujidao.seckill.util.JsonUtil;
+import com.bujidao.seckill.util.RedisUtil;
 import com.bujidao.seckill.vo.GoodsVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +21,6 @@ public class SeckillService {
 
     @Autowired
     private GoodsService goodsService;
-
-    @Autowired
-    private RedisService redisService;
 
     /**
      * 秒杀的业务：减库存，下订单，写入秒杀订单
@@ -58,10 +58,10 @@ public class SeckillService {
     }
 
     public boolean getGoodsOver(long goodsId) {
-        return redisService.exists(SeckillKeyPrefix.isGoodsOver, "" + goodsId);
+        return RedisUtil.exists(SeckillKeyPrefix.isGoodsOver, "" + goodsId);
     }
 
     public void setGoodsOver(long goodsId) {
-        redisService.set(SeckillKeyPrefix.isGoodsOver, "" + goodsId, true);
+        RedisUtil.set(SeckillKeyPrefix.isGoodsOver, "" + goodsId, JsonUtil.objToString(true));
     }
 }

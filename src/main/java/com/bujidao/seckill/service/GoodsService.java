@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -32,4 +33,14 @@ public class GoodsService {
         return effectedNum>0;
     }
 
+    /**
+     * 让所有商品开始秒杀倒计时
+     */
+    public boolean updateAllGoods(){
+        long curTime=System.currentTimeMillis();
+        long startTime=curTime+60*1000;
+        long endTime= curTime + 3 * 60 * 1000;
+        int effected=goodsDao.updateAllGoods(new Date(startTime),new Date(endTime));
+        return effected>0;
+    }
 }

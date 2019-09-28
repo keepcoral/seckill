@@ -7,6 +7,8 @@ import com.bujidao.seckill.domain.User;
 import com.bujidao.seckill.enums.OrderChannel;
 import com.bujidao.seckill.enums.OrderState;
 import com.bujidao.seckill.redis.prefix.OrderKeyPrefix;
+import com.bujidao.seckill.util.JsonUtil;
+import com.bujidao.seckill.util.RedisUtil;
 import com.bujidao.seckill.vo.GoodsVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +22,13 @@ public class OrderService {
     @Autowired
     private OrderDao orderDao;
 
-    @Autowired
-    private RedisService redisService;
 
     /**
      * 根据userId和goodId返回秒杀订单
      */
     public SeckillOrder getOrderByUserIdGoodsId(long userId, long goodsId){
-        return redisService.get(OrderKeyPrefix.getOrderByUidGid,""+userId+"-"+goodsId,SeckillOrder.class);
+        String str=RedisUtil.get(OrderKeyPrefix.getOrderByUidGid,""+userId+"-"+goodsId);
+        return JsonUtil.stringToObject(str,SeckillOrder.class);
     }
 
     /**
@@ -54,7 +55,7 @@ public class OrderService {
         seckillOrder.setOrderId(order.getId());
         orderDao.insertSeckillOrder(seckillOrder);
         log.info("插入的秒杀订单表为--"+seckillOrder);
-        redisService.set(OrderKeyPrefix.getOrderByUidGid,""+user.getId()+"-"+goodsVo.getId(),seckillOrder);
+        RedisUtil.set(OrderKeyPrefix.getOrderByUidGid,""+user.getId()+"-"+goodsVo.getId(),seckillOrder);
         return order;
     }
 
