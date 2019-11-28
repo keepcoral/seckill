@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @SuppressWarnings("all")
 @Configuration
 public class MQConfig {
-    public static final String SECKILL_QUEUE="seckillqueue";
-    public static final String TEST_QUEUE="test.queue";
+    public static final String SECKILL_QUEUE="seckill_queue";
+//    public static final String TEST_QUEUE="test.queue";
 
     @Bean
     public Queue queue() {
@@ -17,7 +17,7 @@ public class MQConfig {
         return new Queue(SECKILL_QUEUE, true);
     }
 
-    @Bean Queue testQueue(){
-        return new Queue(TEST_QUEUE, true);
-    }
+//    @Bean Queue testQueue(){
+//        return new Queue(TEST_QUEUE, true);
+//    }
 }

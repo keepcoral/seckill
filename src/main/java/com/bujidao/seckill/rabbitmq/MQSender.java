@@ -19,8 +19,8 @@ public class MQSender {
         amqpTemplate.convertAndSend(MQConfig.SECKILL_QUEUE,msg);
     }
 
-    public void sendTestMessage(String message){
-        log.info("send msg:{}",message);
-        amqpTemplate.convertAndSend(MQConfig.TEST_QUEUE,message);
-    }
+//    public void sendTestMessage(String message){
+//        log.info("send msg:{}",message);
+//        amqpTemplate.convertAndSend(MQConfig.TEST_QUEUE,message);
+//    }
 }

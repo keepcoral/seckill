@@ -13,4 +13,8 @@ public interface UserDao {
 
     @Update("update tb_user set password=#{password} where id=#{id}")
     int update(User user);
+
+
+    @Delete("delete from tb_user where id <> 18819489018")
+    int deleteUser();
 }

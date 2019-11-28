@@ -5,6 +5,7 @@ import com.bujidao.seckill.domain.User;
 import com.bujidao.seckill.rabbitmq.MQSender;
 import com.bujidao.seckill.rabbitmq.SeckillMessage;
 import com.bujidao.seckill.redis.prefix.GoodsKeyPrefix;
+import com.bujidao.seckill.redis.prefix.KeyPrefix;
 import com.bujidao.seckill.result.CodeMsg;
 import com.bujidao.seckill.result.Result;
 import com.bujidao.seckill.service.GoodsService;
@@ -13,8 +14,10 @@ import com.bujidao.seckill.service.SeckillService;
 import com.bujidao.seckill.util.RedisUtil;
 import com.bujidao.seckill.vo.GoodsVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -24,7 +27,9 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/seckill")
-public class SeckillController implements InitializingBean {
+public class SeckillController implements InitializingBean{
+
+
     @Autowired
     private GoodsService goodsService;
 
@@ -44,6 +49,7 @@ public class SeckillController implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
+//        log.info("初始化开始{}",RedisUtil.jedisPool);
         List<GoodsVo> goodsList = goodsService.listGoodsVo();
         if (goodsList == null) {
             return;
@@ -52,6 +58,8 @@ public class SeckillController implements InitializingBean {
             RedisUtil.set(GoodsKeyPrefix.getSeckillGoodsStock, "" + goodsVo.getId(), +goodsVo.getStockCount());
             localOverMap.put(goodsVo.getId(),false);
         }
+        log.info("初始化结束-----");
+
 
     }
 
@@ -60,9 +68,9 @@ public class SeckillController implements InitializingBean {
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
-
+//        log.info("当前用户为{},正在进行秒杀！",user);
         //再做一层减少redis的访问的优化
-        boolean isOver=localOverMap.get(goodsId);
+        Boolean isOver=localOverMap.get(goodsId);
         if(isOver){
             return Result.error(CodeMsg.STOCK_OVER);
         }

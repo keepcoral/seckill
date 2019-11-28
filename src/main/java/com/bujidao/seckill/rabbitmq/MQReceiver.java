@@ -61,8 +61,8 @@ public class MQReceiver {
     }
 
 
-    @RabbitListener(queues = {MQConfig.TEST_QUEUE})
-    public void receiveTestMessage(String message) {
-        log.info("receive test-msg:{}", message);
-    }
+//    @RabbitListener(queues = {MQConfig.TEST_QUEUE})
+//    public void receiveTestMessage(String message) {
+//        log.info("receive test-msg:{}", message);
+//    }
 }

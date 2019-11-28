@@ -20,7 +20,7 @@ public class UserKeyPrefix extends BaseKeyPrefix {
 
     public static UserKeyPrefix token = new UserKeyPrefix(TOKEN_EXPIRE,"token");
     //设置为永不过期
-    public static UserKeyPrefix getUserById = new UserKeyPrefix(0,"id");
+    public static UserKeyPrefix getUserById = new UserKeyPrefix(TOKEN_EXPIRE,"id");
 
 }
 

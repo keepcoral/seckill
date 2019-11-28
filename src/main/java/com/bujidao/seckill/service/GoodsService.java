@@ -26,7 +26,7 @@ public class GoodsService {
     }
 
     public boolean reduceStock(GoodsVo goodsVo) {
-        log.info("要减少库存的商品为---{}",goodsVo);
+//        log.info("要减少库存的商品为---{}",goodsVo);
         SeckillGoods seckillGoods=new SeckillGoods();
         seckillGoods.setGoodsId(goodsVo.getId());
         int effectedNum=goodsDao.reduceStock(seckillGoods);
@@ -39,7 +39,7 @@ public class GoodsService {
     public boolean updateAllGoods(){
         long curTime=System.currentTimeMillis();
         long startTime=curTime+60*1000;
-        long endTime= curTime + 3 * 60 * 1000;
+        long endTime= curTime + 30 * 60 * 1000;
         int effected=goodsDao.updateAllGoods(new Date(startTime),new Date(endTime));
         return effected>0;
     }

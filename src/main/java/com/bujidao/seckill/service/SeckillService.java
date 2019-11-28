@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.bujidao.seckill.domain.Order;
 import com.bujidao.seckill.domain.SeckillOrder;
 import com.bujidao.seckill.domain.User;
+import com.bujidao.seckill.redis.prefix.OrderKeyPrefix;
 import com.bujidao.seckill.redis.prefix.SeckillKeyPrefix;
 import com.bujidao.seckill.util.JsonUtil;
 import com.bujidao.seckill.util.RedisUtil;
@@ -35,6 +36,15 @@ public class SeckillService {
             setGoodsOver(goodsVo.getId());
             return null;
         }
+
+        //由于redis可能会出现奇怪的错误这里要预防特判一次
+        SeckillOrder so= orderService.getOrderByUserIdGoodsIdByDb(user.getId(), goodsVo.getId());
+        log.info("判重复的订单{}",so);
+        if(so!=null){
+            RedisUtil.set(OrderKeyPrefix.getOrderByUidGid,""+user.getId()+"-"+goodsVo.getId(),so);
+            return null;
+        }
+
         //生成订单，并写入秒杀订单
         Order order = orderService.createOrder(user, goodsVo);
         return order;

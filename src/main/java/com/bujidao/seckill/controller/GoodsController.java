@@ -22,7 +22,6 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.List;
 
 
@@ -98,9 +97,12 @@ public class GoodsController {
         long now = System.currentTimeMillis();
         int seckillState = 0;
         long remainTime = 0;
-        log.info("当前时间{}",new Date(now));
-        log.info("秒杀开始时间{}", goodsVo.getStartDate());
-        log.info("秒杀结束时间{}",goodsVo.getEndDate());
+
+//        log.info("当前时间{}",new Date(now));
+//        log.info("秒杀开始时间{}", goodsVo.getStartDate());
+//        log.info("秒杀结束时间{}",goodsVo.getEndDate());
+
+
         if (now < startAt) {//秒杀还没开始
             seckillState = 0;
             remainTime = (startAt - now)/1000;//倒计时还有多少秒

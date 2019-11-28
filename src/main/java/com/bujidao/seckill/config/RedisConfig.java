@@ -21,6 +21,8 @@ public class RedisConfig {
     private int maxTotal;
     @Value("${redis.pool.maxIdle}")
     private int maxIdle;
+    @Value("${redis.pool.minIdle}")
+    private int minIdle;
     @Value("${redis.pool.maxWait}")
     private long maxWaitMillis;
     @Value("${redis.pool.testOnBorrow}")
@@ -53,6 +55,8 @@ public class RedisConfig {
         jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
 //		获取连接时检查有效性
         jedisPoolConfig.setTestOnBorrow(testOnBorrow);
+//		最少空闲连接
+        jedisPoolConfig.setMinIdle(minIdle);
         return jedisPoolConfig;
     }
 

@@ -124,6 +124,9 @@ public class UserService {
         response.addCookie(cookie);
     }
 
+    public void deleteUser(){
+        userDao.deleteUser();
+    }
     public void addUser(User user) {
         userDao.InsertUser(user);
     }

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -30,6 +31,12 @@ public class OrderService {
         String str=RedisUtil.get(OrderKeyPrefix.getOrderByUidGid,""+userId+"-"+goodsId);
         return JsonUtil.stringToObject(str,SeckillOrder.class);
     }
+
+
+    public SeckillOrder getOrderByUserIdGoodsIdByDb(long userId, long goodsId){
+        return orderDao.queryOrderByUserIdGoodsIdByDb(userId,goodsId);
+    }
+
 
     /**
      * 创建秒杀订单的订单
@@ -67,5 +74,9 @@ public class OrderService {
         orderDao.deleteOrder();
         orderDao.deleteSeckillOrder();
         return true;
+    }
+
+    public List<Order> getAllOrder(){
+        return orderDao.queryAllOrder();
     }
 }

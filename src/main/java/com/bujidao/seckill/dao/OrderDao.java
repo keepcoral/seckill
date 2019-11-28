@@ -4,6 +4,8 @@ import com.bujidao.seckill.domain.Order;
 import com.bujidao.seckill.domain.SeckillOrder;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface OrderDao {
     @Select("select * from tb_seckill_order where user_id=#{userId} and goods_id=#{goodsId}")
@@ -20,6 +22,13 @@ public interface OrderDao {
 
     @Select("select * from tb_order where id=#{orderId}")
     Order getOrderById(@Param("orderId") long orderId);
+
+    @Select("select * from tb_order")
+    List<Order> queryAllOrder();
+
+    @Select("select * from tb_seckill_order where user_id=#{userId} and goods_id=#{goodsId}")
+    SeckillOrder queryOrderByUserIdGoodsIdByDb(long userId, long goodsId);
+
 
     @Delete("DELETE FROM tb_seckill_order")
     int deleteSeckillOrder();

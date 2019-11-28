@@ -28,6 +28,6 @@ public interface GoodsDao {
     @Select("select g.*,sg.stock_count,sg.start_date,sg.end_date,sg.seckill_price from tb_seckill_goods sg left join tb_goods g on sg.goods_id=g.id")
     List<GoodsVo> listGoodsVo();
 
-    @Update("UPDATE tb_seckill_goods SET start_date=#{startDate},end_date=#{endDate}")
+    @Update("UPDATE tb_seckill_goods SET stock_count=10,start_date=#{startDate},end_date=#{endDate}")
     int updateAllGoods(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 }
