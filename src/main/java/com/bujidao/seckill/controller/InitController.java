@@ -2,6 +2,8 @@ package com.bujidao.seckill.controller;
 
 import com.bujidao.seckill.domain.Order;
 import com.bujidao.seckill.domain.User;
+import com.bujidao.seckill.rabbitmq.MQSender;
+import com.bujidao.seckill.rabbitmq.SeckillMessage;
 import com.bujidao.seckill.redis.prefix.GoodsKeyPrefix;
 import com.bujidao.seckill.redis.prefix.OrderKeyPrefix;
 import com.bujidao.seckill.result.Result;
@@ -16,6 +18,7 @@ import org.springframework.aop.aspectj.annotation.PrototypeAspectInstanceFactory
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +37,8 @@ public class InitController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private MQSender mqSender;
     @RequestMapping("/startseckill")
     public String startSeckill(HttpServletResponse response){
 
@@ -47,20 +52,21 @@ public class InitController {
         orderService.deleteAllOrder();
         List<GoodsVo> goodsList = goodsService.listGoodsVo();
         for (GoodsVo goodsVo : goodsList) {
-            RedisUtil.set(GoodsKeyPrefix.getSeckillGoodsStock, "" + goodsVo.getId(), +goodsVo.getStockCount());
+            RedisUtil.set(GoodsKeyPrefix.getSeckillGoodsStock, "" + goodsVo.getId(), goodsVo.getStockCount());
         }
 
-        return "/local/login";
+        return "login";
     }
 
-
-    @RequestMapping("/testget")
-    public boolean testGet(User user){
-        System.out.println("当前用户为"+user);
-        return false;
-    }
-
-
+//
+//    @RequestMapping("/testget")
+//    @ResponseBody
+//    public boolean testGet(User user){
+//        mqSender.sendSeckillMessage(new SeckillMessage());
+//        return false;
+//    }
+//
+//
 
 
 

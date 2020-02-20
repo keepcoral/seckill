@@ -15,8 +15,8 @@ public class GoodsKeyPrefix extends BaseKeyPrefix {
         super(expireSeconds, prefix);
     }
 
-    public static GoodsKeyPrefix getGoodsList = new GoodsKeyPrefix(60,"goodlist");
-    public static GoodsKeyPrefix getGoodsDetail=new GoodsKeyPrefix(60,"ggoodDetail");
+    public static GoodsKeyPrefix getGoodsList = new GoodsKeyPrefix(60,"goodList");
+    public static GoodsKeyPrefix getGoodsDetail=new GoodsKeyPrefix(60,"goodDetail");
     public static GoodsKeyPrefix getSeckillGoodsStock=new GoodsKeyPrefix(0,"goodStock");
 
 }

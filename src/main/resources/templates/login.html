@@ -91,6 +91,10 @@
                 //根据编码弹出信息
                 if(data.code==0){
                     layer.msg("登陆成功!");
+                    var token=data.data;
+                    //H5的新出的特性，比cookie更加安全且容量更大
+                    //本质也是也是一个key-value的json数据库
+                    window.localStorage["token"]=token;
                     window.location.href='/goods/goodslist';
                 }else{
                     layer.msg(data.msg);

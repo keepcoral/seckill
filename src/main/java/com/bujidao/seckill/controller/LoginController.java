@@ -29,15 +29,16 @@ public class LoginController {
 
     @RequestMapping("/dologin")
     @ResponseBody
-    public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
+    public Result<String> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
         log.info("登陆的用户为"+loginVo.toString());
         //登陆校验
-        userService.login(response,loginVo);
-        return Result.success(true);
+        String token= userService.login(response, loginVo);
+//        log.info("当前登陆的用户的token为:"+token);
+        return Result.success(token);
     }
 
 //    @RequestMapping("/dlogin")
-    @ResponseBody
+//    @ResponseBody
     public Result<Boolean> testDlogin(HttpServletResponse response){
         LoginVo loginVo=new LoginVo();
         loginVo.setMobile("18819489018");

@@ -69,7 +69,7 @@ public class UserService {
         return true;
     }
 
-    public boolean login(HttpServletResponse response, LoginVo loginVo) {
+    public String login(HttpServletResponse response, LoginVo loginVo) {
         //这里抛出的异常由异常处理器GlobleExceptionHandler统一处理
         if (loginVo == null) {
             throw new GlobleException(CodeMsg.SERVER_ERROR);
@@ -97,7 +97,7 @@ public class UserService {
         //生成cookie
         String token = UUIDUtil.uuid();
         addCookie(response, user, token);
-        return true;
+        return token;
     }
 
 
@@ -108,7 +108,7 @@ public class UserService {
             return null;
         }
         //延长有效期
-        addCookie(response, user, token);
+//        addCookie(response, user, token);
         return user;
     }
 

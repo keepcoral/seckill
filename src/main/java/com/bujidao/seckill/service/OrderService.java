@@ -61,8 +61,8 @@ public class OrderService {
         seckillOrder.setGoodsId(goodsVo.getId());
         seckillOrder.setOrderId(order.getId());
         orderDao.insertSeckillOrder(seckillOrder);
-        log.info("插入的秒杀订单表为--"+seckillOrder);
-        RedisUtil.set(OrderKeyPrefix.getOrderByUidGid,""+user.getId()+"-"+goodsVo.getId(),seckillOrder);
+//        log.info("插入的秒杀订单表为--"+seckillOrder);
+        RedisUtil.set(OrderKeyPrefix.getOrderByUidGid,user.getId()+"-"+goodsVo.getId(),seckillOrder);
         return order;
     }
 

@@ -44,7 +44,7 @@ public class GoodsController {
      * 返回json数据application/json
      * 返回html数据text/html
      */
-    @RequestMapping(value="/goodslist",produces = "text/html")
+    @RequestMapping(value = "/goodslist", produces = "text/html")
     @ResponseBody
     public String listgoods(HttpServletRequest request,
                             HttpServletResponse response,
@@ -55,39 +55,38 @@ public class GoodsController {
 //            return "login";
         }
         //1.取缓存
-        String html= JsonUtil.stringToObject(RedisUtil.get(GoodsKeyPrefix.getGoodsList,""),String.class);
+        String html = JsonUtil.stringToObject(RedisUtil.get(GoodsKeyPrefix.getGoodsList, ""), String.class);
         //如果redis存在，直接取出页面进行渲染
-        if(!StringUtils.isEmpty(html)) {
+        if (!StringUtils.isEmpty(html)) {
             return html;
         }
 
         List<GoodsVo> goodsList = goodsService.listGoodsVo();
         model.addAttribute("user", user);
-        model.addAttribute("goodsList",goodsList);
+        model.addAttribute("goodsList", goodsList);
         //        return "goodslist";
         //2.手动渲染
-        WebContext webContext=new WebContext(request,response,request.getServletContext(),request.getLocale(),model.asMap()) ;
+        WebContext webContext = new WebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap());
         //渲染的模板的名字就是要渲染的那个页面的名字，如"goodslist.html"
-        html=thymeleafViewResolver.getTemplateEngine().process("goodslist",webContext);
-        if(!StringUtils.isEmpty(html)) {
-            RedisUtil.set(GoodsKeyPrefix.getGoodsList,"",html);
+        html = thymeleafViewResolver.getTemplateEngine().process("goodslist", webContext);
+        if (!StringUtils.isEmpty(html)) {
+            RedisUtil.set(GoodsKeyPrefix.getGoodsList, "", html);
         }
         //3.输出结果
         return html;
     }
 
-    @RequestMapping(value="/detail/{goodsId}")
+    @RequestMapping(value = "/detail/{goodsId}")
     @ResponseBody
     public Result<GoodsDetailVo> toDetail(User user,
                                           @PathVariable("goodsId") long goodsId) {
-        GoodsDetailVo goodsDetailVo=new GoodsDetailVo();
+        GoodsDetailVo goodsDetailVo = new GoodsDetailVo();
         if (user == null) {
             return Result.error(CodeMsg.SESSION_ERROR);
         }
-        log.info("利用token获取的user=="+user);
         GoodsVo goodsVo = goodsService.getSeckillGoodsById(goodsId);
         if (goodsVo == null) {
-            log.info("页面详情页未找到商品id为{}的商品",goodsId);
+            log.info("页面详情页未找到商品id为{}的商品", goodsId);
             return Result.error(CodeMsg.GOODS_NOT_FOUND);
         }
         goodsDetailVo.setGoodsVo(goodsVo);
@@ -105,7 +104,7 @@ public class GoodsController {
 
         if (now < startAt) {//秒杀还没开始
             seckillState = 0;
-            remainTime = (startAt - now)/1000;//倒计时还有多少秒
+            remainTime = (startAt - now) / 1000;//倒计时还有多少秒
         } else if (now > endAt) {//秒杀已经结束
             seckillState = 2;
             remainTime = -1;

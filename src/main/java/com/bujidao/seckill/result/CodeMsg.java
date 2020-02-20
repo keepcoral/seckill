@@ -18,11 +18,16 @@ public class CodeMsg {
     public static CodeMsg PASSWORD_ERROR=new CodeMsg(500215,"密码错误");
     //商品模块 5003XX
     public static CodeMsg GOODS_NOT_FOUND=new CodeMsg(500300,"无法找到该商品");
+    public static CodeMsg NOT_IN_TIME=new CodeMsg(500301,"未到秒杀时间");
     //订单模块 5004XX
-    public static CodeMsg ORDER_NOT_EXIST=new CodeMsg(500300,"订单不存在");
+    public static CodeMsg ORDER_NOT_EXIST=new CodeMsg(500400,"订单不存在");
     //秒杀模块 5005XX
     public static CodeMsg STOCK_OVER=new CodeMsg(500500,"商品已售罄");
     public static CodeMsg REPEATE_SECKILL=new CodeMsg(500501,"不可重复秒杀");
+    public static CodeMsg FAIL_GENERATE_SECKILL_TOKEN=new CodeMsg(500502,"生成秒杀token失败");
+    public static CodeMsg FAIL_CHECK_SECKILL_TOKEN=new CodeMsg(500503,"验证秒杀token失败");
+    public static CodeMsg TOO_MUCH_REQUESTS=new CodeMsg(500504,"活动太过火爆请稍后再试");
+    public static CodeMsg UNKNOWED_ERROR=new CodeMsg(500505,"未知错误");
     private CodeMsg(int code, String msg) {
         this.code = code;
         this.msg = msg;

@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLDataException;
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 
 /**
  * 全局捕获异常类，只要作用在@RequestMapping上，所有的异常都会被捕获
- *
  */
 @Slf4j
 @ControllerAdvice
@@ -38,7 +38,11 @@ public class GlobleExceptionHandler {
             String msg=objectError.getDefaultMessage();
             //这样就可以将错误信息作为ResponseBody传到前端
             return Result.error(CodeMsg.BIND_ERROR.fillArgs(msg));
-        }else{
+        }else if(e instanceof RejectedExecutionException){
+            //队列抛出的异常
+            return Result.error(CodeMsg.TOO_MUCH_REQUESTS);
+        }
+        else{
             return Result.error(CodeMsg.SERVER_ERROR);
         }
     }

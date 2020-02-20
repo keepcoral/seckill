@@ -1,11 +1,8 @@
 package com.bujidao.seckill.util;
 
-import com.bujidao.seckill.config.RedisPool;
 import com.bujidao.seckill.config.RedisSharePool;
 import com.bujidao.seckill.redis.prefix.KeyPrefix;
 import lombok.extern.slf4j.Slf4j;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 

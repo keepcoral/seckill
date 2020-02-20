@@ -37,9 +37,12 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
         String paramToken = request.getParameter(UserService.COOKIE_NAME_TOKEN);
-        String cookieToken = getCookieValue(request, UserService.COOKIE_NAME_TOKEN);
+        String cookieToken = null;
+        if (StringUtils.isEmpty(paramToken)) {
+            cookieToken = getCookieValue(request, UserService.COOKIE_NAME_TOKEN);
+        }
         //如果两个都为空，证明没有登陆返回登陆页面
-        if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
+        if (StringUtils.isEmpty(paramToken) && StringUtils.isEmpty(cookieToken)) {
             return null;
         }
         //优先取request中的token
@@ -51,7 +54,6 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     /**
      * 根据cookie的Name来取得token
-     *
      */
     private String getCookieValue(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
